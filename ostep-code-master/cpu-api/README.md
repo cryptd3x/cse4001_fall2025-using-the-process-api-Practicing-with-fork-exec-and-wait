@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** The child process starts with the same value (100) as the parent because `fork()` creates a complete copy of the parent's memory space. When each process changes a variable, it modifies its own independent local variable. As such, the changes in one process cannot affect the other process's copy of said variable.
+**Answer:** The child process starts with the same value (100) as the parent because `fork()` creates a complete copy of the parent's memory space. When each process changes a variable, it modifies its independent local variable. As such, the changes in one process cannot affect the other process's copy of said variable.
 
 2. Write a program that opens a file (with the `open()` system call) and then calls `fork()` to create a new process. Can both the child and parent access the file descriptor returned by `open()`? What happens when they are writing to the file concurrently?
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** There are many varieties of the exec call because they provide different ways to specify argument and environment handling:
+**Answer:** There are many varieties of the exec call because they provide different ways to specify arguments and environment handling:
 - `execl()` - takes in arguments as a list
 - `execlp()` - searches the PATH for the executable
 - `execle()` - allows for a custom environment
@@ -227,7 +227,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** `wait()` returns the process ID of the child that terminated, or -1 if there are no children or an error occurred. If you use `wait()` in the child process, it returns -1 because the child has no children of its own to wait for.
+**Answer:** `wait()` returns the process ID of the terminated child process, or -1 if no children are present or an error occurred. If you use `wait()` in the child process, it returns -1 because the child has no children to wait for.
 
 6. Write a slight modification of the previous program, this time using `waitpid()` instead of `wait()`. When would `waitpid()` be useful?
 
@@ -276,7 +276,7 @@ int main(int argc, char *argv[]){
 - Have multiple children and want to wait for specific ones
 - Need more control over which child to wait for in complex programs
 
-7. Write a program that creates a child process, and then in the child closes standard output (STDOUT_FILENO). What happens if the child calls `printf()` to print some output after closing the descriptor?
+7. Write a program that creates a child process, and then in the child process closes standard output (STDOUT_FILENO). What happens if the child calls `printf()` to print some output after closing the descriptor?
 
 ### Solution (q7.c):
 
@@ -316,13 +316,12 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** When STDOUT_FILENO is closed in the child, calls to `printf()` and other functions that write to stdout will fail silently or have no visible effect. The output simply disappears because there's no valid file descriptor for stdout. However, stderr (STDERR_FILENO) remains open and functional.
+**Answer:** When STDOUT_FILENO is closed in the child, calls to `printf()` and other functions that write to stdout will fail silently or have no visible effect. The output disappears because there's no valid file descriptor for stdout. However, stderr (STDERR_FILENO) remains open and functional.
 
 ##Compilation and Execution
 
-To compile and run these programs, I first call bash to create a new shell, since I use zsh.
-
-Then, I generate the executables and run them, one by one.
+To compile and run these programs, I first call bash to create a new shell, since I use zsh.  
+Then, I generate the executables and run them, one by one.  
 
 ex.
 ```bash 
@@ -339,10 +338,10 @@ Alternatively, the Makefile could be modified and utilized.
 
 ##Summary of Key Concepts
 
-Question 1: Each process has a unique memory space after calling fork()
-Question 2: File descriptors will be shared between the parent and child processes
-Question 3: The OS controls the order of execution, which makes synchronization important
-Question 4: Multiple variations of exec() provide flexibility for program execution
-Question 5: The wait() and waitpid() calls allow the parent to synchronize with children
-Question 6: Closing file descriptors alters program behavior
-Question 7: Closing file descriptors alters the std I/O streams
+Question 1: Each process has a unique memory space after calling fork()  
+Question 2: File descriptors will be shared between the parent and child processes  
+Question 3: The OS controls the order of execution, which makes synchronization important  
+Question 4: Multiple variations of exec() provide flexibility for program execution  
+Question 5: The wait() and waitpid() calls allow the parent to synchronize with children  
+Question 6: Closing file descriptors alters program behavior  
+Question 7: Closing file descriptors alters the std I/O streams  
