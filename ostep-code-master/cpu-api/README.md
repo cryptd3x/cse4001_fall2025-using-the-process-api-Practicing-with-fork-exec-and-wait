@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** The child process starts with the same value (100) as the parent because `fork()` creates a complete copy of the parent's memory space. When each process changes a variable, they are modifying their own independent copies. As such, the changes in one process cannot affect the other process's copy of said variable.
+**Answer:** The child process starts with the same value (100) as the parent because `fork()` creates a complete copy of the parent's memory space. When each process changes a variable, it modifies its own independent local variable. As such, the changes in one process cannot affect the other process's copy of said variable.
 
 2. Write a program that opens a file (with the `open()` system call) and then calls `fork()` to create a new process. Can both the child and parent access the file descriptor returned by `open()`? What happens when they are writing to the file concurrently?
 
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** It's difficult to guarantee the child process always prints first without using `wait()`. Using `sleep()` in the parent process can help but does not guarantee it. Ultimately, the OS scheduler decides the execution order, so there's no reliable way to ensure ordering without proper synchronization mechanisms like `wait()`.
+**Answer:** It's difficult to guarantee the child process always prints first without using `wait()`. Using `sleep()` in the parent process can help; however, it does not guarantee it. Ultimately, the OS scheduler decides the execution order, so there's no reliable way to ensure ordering without proper synchronization mechanisms like `wait()`.
 
 4. Write a program that calls `fork()` and then calls some form of `exec()` to run the program `/bin/ls`. See if you can try all of the variants of `exec()`, including `execl()`, `execle()`, `execlp()`, `execv()`, `execvp()`, and `execvpe()`.
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-**Answer:** There are many varieties of the exec call because they provide different ways to specify arguments environment handling:
+**Answer:** There are many varieties of the exec call because they provide different ways to specify argument and environment handling:
 - `execl()` - takes in arguments as a list
 - `execlp()` - searches the PATH for the executable
 - `execle()` - allows for a custom environment
@@ -335,14 +335,14 @@ gcc q6.c -o q6 && ./q6
 gcc q7.c -o q7 && ./q7
 ```
 
-Alternatively, the Makefile could be modified and utilized, I simply chose not to do so.
+Alternatively, the Makefile could be modified and utilized.
 
 ##Summary of Key Concepts
 
 Question 1: Each process has a unique memory space after calling fork()
 Question 2: File descriptors will be shared between the parent and child processes
-Question 3: The OS controls the order of execution which makes synchronization important
+Question 3: The OS controls the order of execution, which makes synchronization important
 Question 4: Multiple variations of exec() provide flexibility for program execution
 Question 5: The wait() and waitpid() calls allow the parent to synchronize with children
-Question 6: Closing file descriptors alter program behavior
-Question 7: Closing file descriptors alter the std I/O streams
+Question 6: Closing file descriptors alters program behavior
+Question 7: Closing file descriptors alters the std I/O streams
